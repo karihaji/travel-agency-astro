@@ -1,0 +1,34 @@
+---
+import { client } from "../lib/microcms";
+import type { TravelPlan } from "../lib/microcms";
+
+// microCMSからデータを取得 (ビルド時に実行される)
+const response = await client.get({
+  endpoint: "travel-plans", // 実際のエンクロポイント名に合わせてください
+  queries: { fields: ["id", "title", "price"] },
+});
+
+const travelPlans = response.contents as TravelPlan[];
+---
+
+<html lang="ja">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>旅行会社 - 企画一覧</title>
+	</head>
+	<body>
+		<h1>旅行企画一覧</h1>
+		<ul>
+			{travelPlans.map((plan: TravelPlan) => (
+				<li>
+					<a href={`/plans/${plan.id}`}>
+						{plan.title} - {plan.price.toLocaleString()}円
+					</a>
+				</li>
+			))}
+		</ul>
+	</body>
+</html>

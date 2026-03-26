@@ -1,0 +1,319 @@
+---
+const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>予約フォーム</title>
+    <!-- reCAPTCHA v3 Library -->
+    <script src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}></script>
+  </head>
+  <body>
+    <div class="reserve-container">
+      <h1>ご予約手続き</h1>
+
+      <!-- 第1段階: シミュレーターからの情報表示 -->
+      <section class="form-section">
+        <h2>1. 選択内容の確認</h2>
+        <div class="info-grid">
+          <p><strong>企画ID:</strong> <span id="display-id">---</span></p>
+          <p><strong>参加人数:</strong> <span id="display-participants">---</span>名</p>
+          <p><strong>日程:</strong> <span id="display-dates">---</span></p>
+          <p><strong>合計金額:</strong> <span class="price-text"><span id="display-total">---</span>円</span></p>
+        </div>
+      </section>
+
+      <form id="reserve-form">
+        <!-- 第2段階: 代表者情報 -->
+        <section class="form-section">
+          <h2>2. 代表者情報の入力</h2>
+          <div class="field">
+            <label>氏名 (必須): <input type="text" name="name" required /></label>
+          </div>
+          <div class="field">
+            <label>年齢 (必須): <input type="number" name="age" min="0" required /></label>
+          </div>
+          <div class="field">
+            <label>性別 (必須): 
+              <select name="gender" required>
+                <option value="">選択してください</option>
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+                <option value="other">その他</option>
+              </select>
+            </label>
+          </div>
+          <div class="field">
+            <label>連絡先電話番号 (必須): <input type="tel" name="tel" required /></label>
+          </div>
+          <div class="field">
+            <label>メールアドレス (必須): <input type="email" name="email" required /></label>
+          </div>
+          <div class="field">
+            <label>郵便番号 (必須): <input type="text" name="zip" required /></label>
+          </div>
+          <div class="field">
+            <label>住所 (必須): <input type="text" name="address" required /></label>
+          </div>
+        </section>
+
+        <!-- 第3段階: 同行者・要望 -->
+        <section class="form-section">
+          <h2>3. 同行者情報・ご要望 (任意)</h2>
+          <div class="field">
+            <label>同行者氏名: <input type="text" name="companion_name" /></label>
+          </div>
+          <div class="field">
+            <label>同行者年齢: <input type="number" name="companion_age" min="0" /></label>
+          </div>
+          <div class="field">
+            <label>性別: 
+              <select name="companion_gender">
+                <option value="">選択してください</option>
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+                <option value="other">その他</option>
+              </select>
+            </label>
+          </div>
+          <div class="field">
+            <label>アレルギー・特別なご要望:
+              <textarea name="requests" rows="4"></textarea>
+            </label>
+          </div>
+        </section>
+
+        <!-- 第4段階: 法的同意 -->
+        <section class="form-section">
+          <h2>4. 規約への同意</h2>
+          <div class="agreement-box">
+            <h3>旅行条件書</h3>
+            <div class="scroll-text">
+              <p>ここに旅行条件書の仮の文章が入ります。スクロールして内容を確認してください。本旅行契約は、当社が契約の締結を承諾し、申込金を受理した時に成立するものとします。お客様は、当社の承諾を得て、契約上の地位を第三者に譲渡することができます。取消料については以下の通りです。...</p>
+              <p>サンプルテキスト: 本旅行契約は、当社が契約の締結を承諾し、申込金を受理した時に成立するものとします。お客様は、当社の承諾を得て、契約上の地位を第三者に譲渡することができます。取消料については以下の通りです。...</p>
+              <p>（長い文章のシミュレーション）</p>
+              <p>...</p>
+            </div>
+            <h3>個人情報保護方針</h3>
+            <div class="scroll-text">
+              <p>個人情報保護に関する取り組みについて。当社は、お客様から提供された個人情報を、旅行の手配および受託の目的にのみ使用いたします。...</p>
+            </div>
+          </div>
+          <div class="checkbox-field">
+            <label>
+              <input type="checkbox" id="agree-checkbox" />
+              上記の旅行条件書および個人情報保護方針に同意する
+            </label>
+          </div>
+        </section>
+
+        <button type="submit" id="submit-btn" class="submit-button" disabled>情報を送信して予約を確定する</button>
+      </form>
+    </div>
+  </body>
+</html>
+
+<script define:vars={{ RECAPTCHA_SITE_KEY, GAS_URL }}>
+  // URLパラメータの取得と表示
+  const params = new URLSearchParams(window.location.search);
+  document.getElementById('display-id').textContent = params.get('id') || '---';
+  document.getElementById('display-participants').textContent = params.get('participants') || '---';
+  
+  const dep = params.get('departure');
+  const arr = params.get('arrival');
+  document.getElementById('display-dates').textContent = (dep && arr) ? `${dep} ～ ${arr}` : '---';
+  
+  const total = params.get('total');
+  document.getElementById('display-total').textContent = total ? parseInt(total).toLocaleString() : '---';
+
+  // 同意チェックボックスのロジック
+  const agreeCheckbox = (document.getElementById('agree-checkbox'));
+  const submitBtn = (document.getElementById('submit-btn'));
+  const reserveForm = document.getElementById('reserve-form');
+
+  agreeCheckbox.addEventListener('change', (e) => {
+    submitBtn.disabled = !e.target.checked;
+  });
+
+  // フォーム送信処理
+  reserveForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (!confirm('この内容で送信してもよろしいですか？')) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '送信中...';
+
+    try {
+      // 1. reCAPTCHAトークンの取得
+      const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+
+      // 2. フォームデータの収集
+      const formData = new FormData(reserveForm);
+      const data = Object.fromEntries(formData.entries());
+      
+      // シミュレーターからの情報も追加
+      data.id = params.get('id');
+      data.participants = params.get('participants');
+      data.departure = params.get('departure');
+      data.arrival = params.get('arrival');
+      data.total = params.get('total');
+      
+      // トークンを追加
+      data.recaptchaToken = token;
+
+      // 3. GASへPOST送信
+      const response = await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors', // GASの制限回避のためno-corsを使用
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      // no-cors の場合、response.ok や json() は使えないため、
+      // ここでは成功とみなしてメッセージを表示
+      alert('送信が完了しました。ありがとうございます。');
+      reserveForm.reset();
+      submitBtn.disabled = true;
+      submitBtn.textContent = '情報を送信して予約を確定する';
+      
+    } catch (error) {
+      console.error('Error:', error);
+      alert('送信中にエラーが発生しました。時間をおいて再度お試しください。');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '情報を送信して予約を確定する';
+    }
+  });
+</script>
+
+<style>
+  body {
+    background-color: #f0f2f5;
+    font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 2rem 1rem;
+  }
+
+  .reserve-container {
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  h1 {
+    text-align: center;
+    color: #000;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #333;
+    padding-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    border-left: 5px solid #0d6efd;
+    padding-left: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section {
+    margin-bottom: 3rem;
+  }
+
+  .info-grid {
+    background: #e9ecef;
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .info-grid p {
+    margin: 0.5rem 0;
+  }
+
+  .price-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #0d6efd;
+  }
+
+  .field {
+    margin-bottom: 1.25rem;
+  }
+
+  .field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .field input[type="text"],
+  .field input[type="number"],
+  .field input[type="tel"],
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .agreement-box {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    background: #f8f9fa;
+  }
+
+  .agreement-box h3 {
+    font-size: 1rem;
+    margin-top: 0;
+  }
+
+  .scroll-text {
+    height: 150px;
+    overflow-y: scroll;
+    background: #fff;
+    border: 1px solid #ced4da;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+  }
+
+  .checkbox-field {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 1.25rem;
+    background-color: #198754;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .submit-button:hover:not(:disabled) {
+    background-color: #146c43;
+  }
+
+  .submit-button:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+  }
+</style>

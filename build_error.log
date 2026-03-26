@@ -1,0 +1,16 @@
+15:27:45 [ERROR] Error: Network Error.
+  Details: fetch failed
+    at C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:7276
+    at s (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:3786)
+    at Object.throw (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:3077)
+    at n (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:247)
+    at s (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:494)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+15:27:45 [ERROR] [build] Caught error rendering /: Error: Network Error.
+  Details: fetch failed
+Network Error.
+  Details: fetch failed
+  Stack trace:
+    at C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:7276
+    at Object.throw (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:3077)
+    at s (C:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\node_modules\microcms-js-sdk\dist\microcms-js-sdk.js:1:494)

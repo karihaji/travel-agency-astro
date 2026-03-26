@@ -1,0 +1,70 @@
+---
+import { client } from "../../lib/microcms";
+import type { TravelPlan } from "../../lib/microcms";
+import Estimator from "../../components/Estimator.astro";
+
+export async function getStaticPaths() {
+  const response = await client.get({
+    endpoint: "travel-plans",
+    queries: { fields: ["id"] },
+  });
+  return response.contents.map((content: any) => ({
+    params: { id: content.id },
+  }));
+}
+
+const { id } = Astro.params;
+const plan = await client.get({
+  endpoint: "travel-plans",
+  contentId: id,
+}) as TravelPlan;
+
+// 本来はmicroCMSから取得しますが、今回は動作確認用にダミーデータを定義します
+const transport_options = [
+  { name: "新幹線", price: 15000 },
+  { name: "高速バス", price: 5000 },
+  { name: "飛行機", price: 25000 },
+];
+
+const ac_options = [
+  { name: "スタンダードホテル", price: 0 },
+  { name: "デラックスホテル", price: 10000 },
+  { name: "和風旅館", price: 8000 },
+];
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{plan.title} - 詳細</title>
+  </head>
+  <body>
+    <a href="/">← 一覧に戻る</a>
+    <h1>{plan.title}</h1>
+    <p>基本料金: {plan.price.toLocaleString()}円</p>
+
+    <hr />
+
+    <Estimator 
+      id={id}
+      price={plan.price} 
+      transport_options={transport_options} 
+      ac_options={ac_options} 
+    />
+
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    line-height: 1.6;
+  }
+  h1 {
+    color: #333;
+  }
+</style>

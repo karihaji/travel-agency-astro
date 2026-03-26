@@ -1,0 +1,205 @@
+---
+interface Props {
+  id: string;
+  price: number;
+  transport_options: { name: string; price: number }[];
+  ac_options: { name: string; price: number }[];
+}
+
+const { id, price, transport_options, ac_options } = Astro.props;
+---
+
+<div class="estimator-container">
+  <h3>お見積もりシミュレーター</h3>
+  
+  <div class="input-group">
+    <div class="field">
+      <label for="departure-date">出発日</label>
+      <input type="date" id="departure-date" />
+    </div>
+    <div class="field">
+      <label for="arrival-date">到着日</label>
+      <input type="date" id="arrival-date" />
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="participants">参加人数</label>
+    <input type="number" id="participants" value="1" min="1" />
+  </div>
+
+  <div class="field">
+    <label for="transport">移動手段</label>
+    <select id="transport">
+      <option value="">選択してください</option>
+      {transport_options.map(opt => (
+        <option value={opt.price}>{opt.name} (+{opt.price.toLocaleString()}円)</option>
+      ))}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="accommodation">宿泊施設</label>
+    <select id="accommodation">
+      <option value="">選択してください</option>
+      {ac_options.map(opt => (
+        <option value={opt.price}>{opt.name} (+{opt.price.toLocaleString()}円)</option>
+      ))}
+    </select>
+  </div>
+
+  <div class="result-box">
+    <p class="total-label">概算合計金額:</p>
+    <p class="total-amount"><span id="total-price">---</span>円</p>
+    <p id="calc-warning" class="warning-text" style="display: none;">※ 人数、移動手段、宿泊施設をすべて正しく選択してください。</p>
+  </div>
+
+  <button id="reserve-btn" class="reserve-button" disabled>この条件で予約へ進む</button>
+</div>
+
+<script define:vars={{ basePrice: price, planId: id }}>
+  const departureInput = document.getElementById('departure-date');
+  const arrivalInput = document.getElementById('arrival-date');
+  const participantsInput = document.getElementById('participants');
+  const transportSelect = document.getElementById('transport');
+  const acSelect = document.getElementById('accommodation');
+  const totalPriceSpan = document.getElementById('total-price');
+  const warningText = document.getElementById('calc-warning');
+  const reserveButton = document.getElementById('reserve-btn');
+
+  function updateEstimation() {
+    const participants = parseInt(participantsInput.value) || 0;
+    const transportVal = transportSelect.value;
+    const acVal = acSelect.value;
+
+    const transportPrice = parseInt(transportVal);
+    const acPrice = parseInt(acVal);
+
+    // バリデーション: 人数が1以上、かつ移動・宿泊が選択されていること
+    const isSelectionValid = participants >= 1 && transportVal !== "" && acVal !== "";
+
+    if (isSelectionValid) {
+      const total = (basePrice + transportPrice + acPrice) * participants;
+      totalPriceSpan.textContent = total.toLocaleString();
+      warningText.style.display = 'none';
+      reserveButton.disabled = false;
+    } else {
+      totalPriceSpan.textContent = '---';
+      warningText.style.display = 'block';
+      reserveButton.disabled = true;
+    }
+  }
+
+  function goToReserve() {
+    const params = new URLSearchParams({
+      id: planId,
+      participants: participantsInput.value,
+      departure: departureInput.value,
+      arrival: arrivalInput.value,
+      total: totalPriceSpan.textContent.replace(/,/g, '')
+    });
+    window.location.href = `/reserve?${params.toString()}`;
+  }
+
+  // 各入力項目の変更を監視
+  [participantsInput, transportSelect, acSelect].forEach(input => {
+    input.addEventListener('change', updateEstimation);
+    input.addEventListener('input', updateEstimation);
+  });
+
+  reserveButton.addEventListener('click', goToReserve);
+
+  // 初回実行
+  updateEstimation();
+</script>
+
+<style>
+  .estimator-container {
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-width: 500px;
+    margin: 2rem 0;
+    font-family: sans-serif;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.4rem;
+    color: #495057;
+  }
+
+  .field input, .field select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  .result-box {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .total-label {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  .total-amount {
+    margin: 0.5rem 0;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #0d6efd;
+  }
+
+  .warning-text {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    color: #dc3545;
+  }
+
+  .reserve-button {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #198754;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .reserve-button:hover:not(:disabled) {
+    background-color: #146c43;
+  }
+
+  .reserve-button:disabled {
+    background-color: #adb5bd;
+    cursor: not-allowed;
+  }
+</style>
