@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ocean-900: #0c4a6e;
+  --color-ocean-800: #075985;
+  --color-ocean-700: #0369a1;
+  --color-ocean-600: #0284c7;
+  --color-ocean-500: #0ea5e9;
+  --color-ocean-400: #38bdf8;
+  --color-ocean-300: #7dd3fc;
+  --color-ocean-200: #bae6fd;
+  --color-ocean-100: #e0f2fe;
+  --color-ocean-50: #f0f9ff;
+  
+  --color-sand-50: #fefce8;
+  --color-sand-100: #fef9c3;
+  
+  --font-sans: "Inter", "Noto Sans JP", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply text-slate-900 bg-white;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-bold transition-all duration-200 cursor-pointer;
+  }
+  
+  .btn-primary {
+    @apply bg-ocean-700 text-white shadow-md;
+    &:hover {
+      @apply bg-ocean-800 shadow-lg;
+    }
+  }
+  
+  .btn-outline {
+    @apply border-2 border-ocean-700 text-ocean-700;
+    &:hover {
+      @apply bg-ocean-50;
+    }
+  }
+
+  .card {
+    @apply bg-white rounded-xl border border-slate-200 overflow-hidden transition-all duration-300;
+  }
+
+  .section-title {
+    @apply text-3xl font-bold text-slate-900 relative pb-4 mb-8;
+  }
+
+  .section-title::after {
+    @apply content-[''] absolute bottom-0 left-0 w-16 h-1 bg-ocean-600 rounded-full;
+  }
+
+  .form-input {
+    @apply w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl outline-none transition-all text-slate-900;
+    &:focus {
+      @apply ring-2 ring-ocean-500 border-ocean-500;
+    }
+    &::placeholder {
+      @apply text-slate-400;
+    }
+  }
+}
