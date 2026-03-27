@@ -12,7 +12,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.2",
     "astro": "^6.0.8",
-    "microcms-js-sdk": "^3.3.0"
+    "microcms-js-sdk": "^3.3.0",
+    "tailwindcss": "^4.2.2"
   }
 }
