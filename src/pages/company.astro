@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="会社概要">
+  <div class="container page-content">
+    <h1 class="page-title">会社概要・法的表記</h1>
+
+    <section class="content-section">
+      <h2 class="section-subtitle">企業情報</h2>
+      <table class="info-table">
+        <tr>
+          <th>社名</th>
+          <td>サンライズ旅行社株式会社 (Sunrise Travel Agency Co., Ltd.)</td>
+        </tr>
+        <tr>
+          <th>設立</th>
+          <td>1990年4月1日</td>
+        </tr>
+        <tr>
+          <th>資本金</th>
+          <td>3,000万円</td>
+        </tr>
+        <tr>
+          <th>代表者</th>
+          <td>代表取締役社長　日向 太郎</td>
+        </tr>
+        <tr>
+          <th>本社所在地</th>
+          <td>〒100-0001 東京都千代田区千代田1-1</td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-subtitle">旅行業の法定標識</h2>
+      <div class="legal-sign">
+        <table class="sign-table">
+          <tr>
+            <th colspan="2">旅行業登録票</th>
+          </tr>
+          <tr>
+            <th>業務範囲</th>
+            <td>海外旅行・国内旅行</td>
+          </tr>
+          <tr>
+            <th>登録番号</th>
+            <td>東京都知事登録旅行業第2-12345号</td>
+          </tr>
+          <tr>
+            <th>登録年月日</th>
+            <td>2010年5月20日</td>
+          </tr>
+          <tr>
+            <th>有効期限</th>
+            <td>2025年5月19日まで</td>
+          </tr>
+          <tr>
+            <th>氏名又は名称</th>
+            <td>サンライズ旅行社株式会社</td>
+          </tr>
+          <tr>
+            <th>営業所の名称</th>
+            <td>本社営業所</td>
+          </tr>
+          <tr>
+            <th>旅行業務取扱管理者</th>
+            <td>山田 花子</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2 class="section-subtitle">各種規約・ポリシー</h2>
+      <ul class="document-list">
+        <li><a href="#" class="doc-link">旅行条件書 (PDF形式)</a></li>
+        <li><a href="#" class="doc-link">個人情報保護方針 (PDF形式)</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <style>
+    .page-content { padding: 4rem 1.5rem; }
+    .page-title { font-size: 2.5rem; text-align: center; margin-bottom: 4rem; }
+    .section-subtitle { font-size: 1.5rem; border-left: 6px solid var(--primary); padding-left: 1rem; margin-bottom: 1.5rem; }
+
+    .content-section { margin-bottom: 4rem; }
+
+    .info-table, .sign-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+
+    .info-table th, .info-table td, .sign-table th, .sign-table td {
+      border: 1px solid var(--border);
+      padding: 1rem;
+      text-align: left;
+    }
+
+    .info-table th { width: 30%; background: var(--light); }
+    .sign-table th { width: 40%; background: var(--light); }
+
+    .document-list { list-style: none; padding: 0; }
+    .document-list li { margin-bottom: 1rem; }
+    .doc-link { color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px solid var(--primary); }
+    .doc-link:hover { color: var(--primary-hover); }
+
+    @media (max-width: 600px) {
+      .info-table th, .info-table td, .sign-table th, .sign-table td {
+        display: block;
+        width: 100%;
+      }
+      .info-table th, .sign-table th { border-bottom: none; }
+    }
+  </style>
+</BaseLayout>

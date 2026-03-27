@@ -1,12 +1,13 @@
 ---
-interface Props {
-  id: string;
-  price: number;
-  transport_options: { name: string; price: number }[];
-  ac_options: { name: string; price: number }[];
-}
+const { plan } = Astro.props;
+const { id, price } = plan;
 
-const { id, price, transport_options, ac_options } = Astro.props;
+// Safe formatting helper
+const formatPrice = (p: any) => (typeof p === 'number' ? p.toLocaleString() : '0');
+
+// Fallback to empty arrays if options are missing in microCMS
+const transport_options = plan.transport_options || [];
+const ac_options = plan.ac_options || [];
 ---
 
 <div class="estimator-container">
@@ -31,9 +32,9 @@ const { id, price, transport_options, ac_options } = Astro.props;
   <div class="field">
     <label for="transport">移動手段</label>
     <select id="transport">
-      <option value="">選択してください</option>
+      <option value="0">基本プラン (移動費なし)</option>
       {transport_options.map(opt => (
-        <option value={opt.price}>{opt.name} (+{opt.price.toLocaleString()}円)</option>
+        <option value={opt?.price || 0}>{opt?.name || '不明なオプション'} (+{formatPrice(opt?.price)}円)</option>
       ))}
     </select>
   </div>
@@ -41,9 +42,9 @@ const { id, price, transport_options, ac_options } = Astro.props;
   <div class="field">
     <label for="accommodation">宿泊施設</label>
     <select id="accommodation">
-      <option value="">選択してください</option>
+      <option value="0">基本プラン (宿泊費なし)</option>
       {ac_options.map(opt => (
-        <option value={opt.price}>{opt.name} (+{opt.price.toLocaleString()}円)</option>
+        <option value={opt?.price || 0}>{opt?.name || '不明なオプション'} (+{formatPrice(opt?.price)}円)</option>
       ))}
     </select>
   </div>
@@ -121,41 +122,39 @@ const { id, price, transport_options, ac_options } = Astro.props;
     padding: 1.5rem;
     max-width: 500px;
     margin: 2rem 0;
-    font-family: sans-serif;
-  }
-
-  .input-group {
+  .estimator-card {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
-  .field {
-    margin-bottom: 1rem;
-    flex: 1;
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
-  .field label {
-    display: block;
+  .field-group label {
     font-size: 0.9rem;
     font-weight: bold;
-    margin-bottom: 0.4rem;
-    color: #495057;
+    color: #555;
   }
 
-  .field input, .field select {
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #ced4da;
+  .field-group input {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 1rem;
-    box-sizing: border-box;
+    transition: border-color 0.2s;
+  }
+
+  .field-group input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    ring: 2px solid rgba(13, 110, 253, 0.1);
   }
 
   .result-box {
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
     padding: 1rem;
     margin-top: 1.5rem;
     text-align: center;

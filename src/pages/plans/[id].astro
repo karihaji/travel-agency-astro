@@ -1,70 +1,73 @@
 ---
-import { client } from "../../lib/microcms";
-import type { TravelPlan } from "../../lib/microcms";
-import Estimator from "../../components/Estimator.astro";
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Estimator from '../../components/Estimator.astro';
+import { getTravelPlan, client } from '../../lib/microcms';
 
 export async function getStaticPaths() {
-  const response = await client.get({
-    endpoint: "travel-plans",
-    queries: { fields: ["id"] },
-  });
-  return response.contents.map((content: any) => ({
+  const res = await client.get({ endpoint: 'travel-plans' });
+  
+  return res.contents.map((content) => ({
     params: { id: content.id },
   }));
 }
 
 const { id } = Astro.params;
-const plan = await client.get({
-  endpoint: "travel-plans",
-  contentId: id,
-}) as TravelPlan;
+const plan = await getTravelPlan(id);
 
-// 本来はmicroCMSから取得しますが、今回は動作確認用にダミーデータを定義します
-const transport_options = [
-  { name: "新幹線", price: 15000 },
-  { name: "高速バス", price: 5000 },
-  { name: "飛行機", price: 25000 },
-];
-
-const ac_options = [
-  { name: "スタンダードホテル", price: 0 },
-  { name: "デラックスホテル", price: 10000 },
-  { name: "和風旅館", price: 8000 },
-];
+if (!plan) {
+  return Astro.redirect('/404');
+}
 ---
 
-<html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{plan.title} - 詳細</title>
-  </head>
-  <body>
-    <a href="/">← 一覧に戻る</a>
-    <h1>{plan.title}</h1>
-    <p>基本料金: {plan.price.toLocaleString()}円</p>
+<BaseLayout title={plan.title}>
+  <div class="container page-content">
+    <div class="detail-header">
+      <a href="/travel-agency-astro/plans" class="back-link">&larr; 一覧に戻る</a>
+      <h1 class="plan-title">{plan.title}</h1>
+      <p class="plan-price-info">基本料金: <span class="price-val">{plan.price.toLocaleString()}円</span>名様）</p>
+    </div>
 
-    <hr />
+    <div class="detail-grid">
+      <div class="main-info">
+        <section class="description-section">
+          <h2>プランの詳細</h2>
+          <div class="rich-text">
+            {plan.description ? plan.description.split('\n').map((line) => <p>{line}</p>) : <p>詳細情報は現在準備中です。誠に恐れ入りますが、詳細はお問い合わせください。</p>}
+          </div>
+        </section>
+      </div>
 
-    <Estimator 
-      id={id}
-      price={plan.price} 
-      transport_options={transport_options} 
-      ac_options={ac_options} 
-    />
+      <aside class="sidebar">
+        <div class="estimator-sidebar-box">
+          <h2>見積もりシミュレーター</h2>
+          <Estimator plan={plan} />
+        </div>
+      </aside>
+    </div>
+  </div>
 
-  </body>
-</html>
+  <style>
+    .page-content { padding: 4rem 1.5rem; }
+    
+    .detail-header { border-bottom: 2px solid var(--border); padding-bottom: 2rem; margin-bottom: 3rem; }
+    .back-link { text-decoration: none; color: var(--primary); font-size: 0.9rem; font-weight: bold; margin-bottom: 1rem; display: inline-block; }
+    
+    .plan-title { font-size: 2.2rem; margin: 0.5rem 0 1rem; color: var(--dark); }
+    .plan-price-info { font-size: 1.1rem; color: #666; }
+    .price-val { font-size: 1.8rem; font-weight: bold; color: var(--primary); }
 
-<style>
-  body {
-    font-family: sans-serif;
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-    line-height: 1.6;
-  }
-  h1 {
-    color: #333;
-  }
-</style>
+    .detail-grid { display: grid; grid-template-columns: 1fr 350px; gap: 4rem; }
+
+    .description-section h2 { font-size: 1.5rem; border-left: 5px solid var(--primary); padding-left: 1rem; margin-bottom: 1.5rem; }
+    .rich-text p { margin-bottom: 1rem; color: #444; }
+
+    .sidebar { position: sticky; top: 120px; align-self: start; }
+    .estimator-sidebar-box { background: var(--light); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .estimator-sidebar-box h2 { font-size: 1.25rem; margin-top: 0; margin-bottom: 1.5rem; text-align: center; color: var(--dark); }
+
+    @media (max-width: 900px) {
+      .detail-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .sidebar { position: static; }
+    }
+  </style>
+</BaseLayout>

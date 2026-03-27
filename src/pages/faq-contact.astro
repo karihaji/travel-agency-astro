@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+---
+
+<BaseLayout title="よくある質問・お問い合わせ">
+  <div class="container page-content">
+    <h1 class="page-title">よくある質問・お問い合わせ</h1>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <h2 class="section-subtitle">よくある質問</h2>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <div class="faq-q">Q. 予約のキャンセルはいつまで可能ですか？</div>
+          <div class="faq-a">A. 旅行開始日の21日前までは無料でキャンセル可能です。それ以降は所定のキャンセル料が発生いたします。詳細は旅行条件書をご確認ください。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Q. 一人でも参加可能ですか？</div>
+          <div class="faq-a">A. はい、一部のプランを除き、お一人様からご参加いただけます。ただし、お一人様利用の追加料金が発生する場合がございます。</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Q. 小学生以下の料金設定はありますか？</div>
+          <div class="faq-a">A. はい、お子様料金を設定しているプランがございます。シミュレーターで人数を選択する際に対象の方を含めて計算してください。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section class="contact-section">
+      <h2 class="section-subtitle">総合お問い合わせフォーム</h2>
+      <p class="contact-desc">サービスに関するご質問や、団体旅行のご相談など、お気軽にお問い合わせください。</p>
+      
+      <div class="contact-form-wrapper">
+        <form id="general-contact-form">
+          <div class="form-group">
+            <label>お名前 (必須)</label>
+            <input type="text" name="name" required />
+          </div>
+          <div class="form-group">
+            <label>メールアドレス (必須)</label>
+            <input type="email" name="email" required />
+          </div>
+          <div class="form-group">
+            <label>お問い合わせ内容 (必須)</label>
+            <textarea name="message" rows="6" required></textarea>
+          </div>
+          
+          <button type="submit" id="contact-submit" class="contact-btn">内容を送信する</button>
+        </form>
+        <p class="recaptcha-notice">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+      </div>
+    </section>
+  </div>
+
+  <script src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}></script>
+  <script define:vars={{ RECAPTCHA_SITE_KEY }}>
+    const form = document.getElementById('general-contact-form');
+    const btn = document.getElementById('contact-submit');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = '送信中...';
+
+      try {
+        const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact' });
+        // NOTE: 実際にはここでGAS等へ送信処理を行います
+        console.log('reCAPTCHA token acquired:', token);
+        alert('お問い合わせを受け付けました。後ほど担当者よりご連絡いたします。');
+        form.reset();
+      } catch (err) {
+        alert('送信に失敗しました。');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '内容を送信する';
+      }
+    });
+  </script>
+
+  <style>
+    .page-content { padding: 4rem 1.5rem; }
+    .page-title { font-size: 2.5rem; text-align: center; margin-bottom: 4rem; }
+    .section-subtitle { font-size: 1.75rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; margin-bottom: 2rem; }
+
+    /* FAQ */
+    .faq-section { margin-bottom: 5rem; }
+    .faq-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+    .faq-item { background: var(--light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary); }
+    .faq-q { font-weight: bold; color: var(--dark); margin-bottom: 0.5rem; }
+    .faq-a { font-size: 0.95rem; color: #555; }
+
+    /* Contact */
+    .contact-desc { margin-bottom: 2rem; color: #666; }
+    .contact-form-wrapper { background: #fff; border: 1px solid var(--border); padding: 2.5rem; border-radius: 12px; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
+    .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
+    
+    .contact-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .contact-btn:hover { background: var(--primary-hover); }
+    .contact-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    .recaptcha-notice { font-size: 0.75rem; color: #999; margin-top: 1rem; text-align: center; }
+  </style>
+</BaseLayout>

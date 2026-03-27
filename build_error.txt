@@ -1,0 +1,30 @@
+
+> travel-agency-astro@0.0.1 build
+> astro build
+
+[2m09:41:58[22m [34m[types][39m Generated [2m47ms[22m
+[2m09:41:58[22m [34m[build][39m output: [34m"static"[39m
+[2m09:41:58[22m [34m[build][39m mode: [34m"static"[39m
+[2m09:41:58[22m [34m[build][39m directory: [34mC:\Users\user\.gemini\antigravity\scratch\travel-agency-astro\dist\[39m
+[2m09:41:58[22m [34m[build][39m Collecting build info...
+[2m09:41:58[22m [34m[build][39m [32m笨・Completed in 61ms.[39m
+[2m09:41:58[22m [34m[build][39m Building static entrypoints...
+[33m[1m09:41:59[22m [WARN] [vite][39m 
+/travel-agency-astro/hero.png referenced in /travel-agency-astro/hero.png didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[33m[1m09:41:59[22m [WARN] [vite][39m [33m"matchHostname", "matchPathname", "matchPort" and "matchProtocol" are imported from external module "@astrojs/internal-helpers/remote" but never used in "node_modules/astro/dist/assets/utils/index.js".[39m
+[2m09:41:59[22m [34m[vite][39m [32m笨・built in 1.03s[39m
+[2m09:41:59[22m [34m[vite][39m [32m笨・built in 9ms[39m
+[2m09:41:59[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m09:41:59[22m   [34m笏懌楳[39m [2m/company/index.html[22m [2m(+14ms)[22m 
+[2m09:41:59[22m   [34m笏懌楳[39m [2m/faq-contact/index.html[22m [2m(+7ms)[22m 
+[2m09:41:59[22m   [34m笏懌楳[39m [2m/plans/8i6pcjb3h_q/index.html[22m [2m(+125ms)[22m 
+[2m09:42:00[22m   [34m笏懌楳[39m [2m/plans/index.html[22m [2m(+108ms)[22m 
+[2m09:42:00[22m   [34m笏懌楳[39m [2m/reserve/index.html[22m [2m(+12ms)[22m 
+[2m09:42:00[22m   [34m笏懌楳[39m [2m/index.html[22m [2m(+102ms)[22m 
+[2m09:42:00[22m [32m笨・Completed in 606ms.
+[39m
+[2m09:42:00[22m [34m[build][39m [32m笨・Completed in 1.70s.[39m
+[2m09:42:00[22m [34m[build][39m 6 page(s) built in [1m1.77s[22m
+[2m09:42:00[22m [34m[build][39m [1mComplete![22m
