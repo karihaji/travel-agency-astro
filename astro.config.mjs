@@ -10,12 +10,5 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
-    css: {
-      postcss: {
-        plugins: [
-          (await import('@tailwindcss/postcss')).default(),
-        ],
-      },
-    },
   },
 });
