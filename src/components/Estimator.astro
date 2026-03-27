@@ -92,6 +92,8 @@ const ac_options = plan.ac_options || [];
   }
 
   function goToReserve() {
+    const base = import.meta.env.BASE_URL;
+    const normalizedBase = base.endsWith('/') ? base : base + '/';
     const params = new URLSearchParams({
       id: planId,
       participants: participantsInput.value,
@@ -99,7 +101,7 @@ const ac_options = plan.ac_options || [];
       arrival: arrivalInput.value,
       total: totalPriceSpan.textContent.replace(/,/g, '')
     });
-    window.location.href = `${import.meta.env.BASE_URL}reserve?${params.toString()}`;
+    window.location.href = `${normalizedBase}reserve?${params.toString()}`;
   }
 
   // 各入力項目の変更を監視

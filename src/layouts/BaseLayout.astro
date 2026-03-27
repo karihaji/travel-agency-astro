@@ -1,6 +1,7 @@
 ---
 const { title } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith('/') ? base : base + '/';
 ---
 
 <!DOCTYPE html>
@@ -16,16 +17,16 @@ const base = import.meta.env.BASE_URL;
   <body>
     <header class="main-header">
       <div class="container header-content">
-        <a href={base} class="logo">
+        <a href={normalizedBase} class="logo">
           <span class="logo-icon">☀️</span>
           <span class="logo-text">サンライズ旅行社</span>
         </a>
         <nav class="nav-menu">
           <ul>
-            <li><a href={base}>トップ</a></li>
-            <li><a href={`${base}plans`}>旅行企画一覧</a></li>
-            <li><a href={`${base}faq-contact`}>よくある質問・問合せ</a></li>
-            <li><a href={`${base}company`}>会社概要</a></li>
+            <li><a href={normalizedBase}>トップ</a></li>
+            <li><a href={`${normalizedBase}plans`}>旅行企画一覧</a></li>
+            <li><a href={`${normalizedBase}faq-contact`}>よくある質問・問合せ</a></li>
+            <li><a href={`${normalizedBase}company`}>会社概要</a></li>
           </ul>
         </nav>
       </div>
@@ -44,8 +45,8 @@ const base = import.meta.env.BASE_URL;
         </div>
         <div class="footer-links">
           <ul>
-            <li><a href={`${base}company`}>旅行条件書</a></li>
-            <li><a href={`${base}company`}>個人情報保護方針</a></li>
+            <li><a href={`${normalizedBase}company`}>旅行条件書</a></li>
+            <li><a href={`${normalizedBase}company`}>個人情報保護方針</a></li>
           </ul>
         </div>
       </div>

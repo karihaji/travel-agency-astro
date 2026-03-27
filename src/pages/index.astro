@@ -6,6 +6,7 @@ const { contents: allPlans } = await getTravelPlans();
 const plans = allPlans.slice(0, 5);
 const hasMore = allPlans.length > 5;
 const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith('/') ? base : base + '/';
 ---
 
 <BaseLayout title="ホーム">
@@ -15,7 +16,7 @@ const base = import.meta.env.BASE_URL;
     <div class="container hero-content">
       <h1>特別な旅を、あなたに。</h1>
       <p>サンライズ旅行社が提案する、こころ動かす感動の旅路。</p>
-      <a href={`${base}plans`} class="btn btn-primary">プラン一覧を見る</a>
+      <a href={`${normalizedBase}plans`} class="btn btn-primary">プラン一覧を見る</a>
     </div>
   </section>
 
@@ -26,11 +27,11 @@ const base = import.meta.env.BASE_URL;
         <div class="intro-text">
           <h2 class="section-title">私たちについて</h2>
           <p>サンライズ旅行社は、創業以来「一生の思い出に残る旅」を提供し続けています。厳選された宿泊施設と、お客様一人ひとりに合わせた最適なプランニングで、高品質な旅の体験をお約束します。</p>
-          <a href={`${base}company`} class="text-link">会社案内はこちら &rarr;</a>
+          <a href={`${normalizedBase}company`} class="text-link">会社案内はこちら &rarr;</a>
         </div>
         <div class="intro-visual">
           <div class="visual-box">
-             <img src={`${base}hero.png`} alt="Travel Visual" />
+             <img src={`${normalizedBase}hero.png`} alt="Travel Visual" />
           </div>
         </div>
       </div>
@@ -42,20 +43,20 @@ const base = import.meta.env.BASE_URL;
     <div class="container">
       <h2 class="section-title">おすすめの旅行企画</h2>
       <div class="plan-grid">
-        {plans.map((plan) => (
-          <a href={`${base}plans/${plan.id}`} class="plan-card">
-            <div class="plan-info">
+        {plans.slice(0, 5).map((plan) => (
+          <a href={`${normalizedBase}plans/${plan.id}`} class="plan-card">
+            <div class="plan-card-body">
               <h3>{plan.title}</h3>
               <p class="plan-price">基本料金: <span>{plan.price.toLocaleString()}円</span></p>
-              <span class="view-detail">詳細を見る</span>
+              <span class="view-detail">詳細を見る &rarr;</span>
             </div>
           </a>
         ))}
       </div>
 
       {hasMore && (
-        <div class="view-all">
-          <a href={`${base}plans`} class="btn btn-outline">すべてのプランを見る ({allPlans.length}件)</a>
+        <div class="more-plans-link">
+          <a href={`${normalizedBase}plans`} class="btn btn-outline">すべての旅行企画を見る</a>
         </div>
       )}
     </div>

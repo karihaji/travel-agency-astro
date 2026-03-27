@@ -4,6 +4,7 @@ import { getTravelPlans } from '../../lib/microcms';
 
 const { contents: plans } = await getTravelPlans();
 const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith('/') ? base : base + '/';
 ---
 
 <BaseLayout title="旅行企画一覧">
@@ -13,7 +14,7 @@ const base = import.meta.env.BASE_URL;
 
     <div class="plan-list-grid">
       {plans.map((plan) => (
-        <a href={`${base}plans/${plan.id}`} class="plan-item-card">
+        <a href={`${normalizedBase}plans/${plan.id}`} class="plan-item-card">
           <div class="card-body">
             <h3>{plan.title}</h3>
             <p class="plan-price-large">基本料金: <span>{plan.price.toLocaleString()}円</span></p>
