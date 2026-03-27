@@ -5,117 +5,70 @@ import { getTravelPlans } from '../../lib/microcms';
 const { contents: plans } = await getTravelPlans();
 const base = import.meta.env.BASE_URL;
 const normalizedBase = base.endsWith('/') ? base : base + '/';
+
+// Image mapping helper (shared with index.astro)
+const planImages = [
+  `${normalizedBase}images/plans/yakushima.png`,
+  `${normalizedBase}images/plans/tanegashima.png`,
+  `${normalizedBase}images/plans/ferry.png`,
+];
+
+const getPlanImage = (index: number) => planImages[index % planImages.length];
 ---
 
 <BaseLayout title="旅行企画一覧">
-  <div class="container page-content">
-    <h1 class="page-title">旅行企画一覧</h1>
-    <p class="page-description">サンライズ旅行社がお届けする、現在募集中の旅行企画一覧です。お好みのプランをお選びください。</p>
-
-    <div class="plan-list-grid">
-      {plans.map((plan) => (
-        <a href={`${normalizedBase}plans/${plan.id}`} class="plan-item-card">
-          <div class="card-body">
-            <h3>{plan.title}</h3>
-            <p class="plan-price-large">基本料金: <span>{plan.price.toLocaleString()}円</span></p>
-            <div class="card-footer">
-              <span class="btn-text">詳細・シミュレーションへ &rarr;</span>
-            </div>
-          </div>
-        </a>
-      ))}
+  <section class="bg-ocean-900 py-20 text-white">
+    <div class="container text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">旅行企画一覧</h1>
+      <p class="text-ocean-100 max-w-2xl mx-auto text-lg font-light">
+        種子島・屋久島の旅行なら、市丸グループのわかさ旅行センターにお任せください。<br class="hidden md:block"/>
+        島々を熟知したプロフェッショナルが、現在募集中の魅力的なプランをご案内いたします。
+      </p>
     </div>
+  </section>
 
-    {plans.length === 0 && (
-        <p class="no-data">現在、募集中の企画はございません。後ほど再度ご確認ください。</p>
+  <div class="container py-20">
+    {plans.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {plans.map((plan, index) => (
+          <a href={`${normalizedBase}plans/${plan.id}/`} class="group h-full">
+            <div class="card h-full flex flex-col hover:border-ocean-300 hover:shadow-xl group-hover:-translate-y-2">
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img 
+                  src={getPlanImage(index)} 
+                  alt={plan.title} 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h3 class="text-xl font-bold mb-3 text-slate-900 group-hover:text-ocean-700 transition-colors text-left">
+                  {plan.title}
+                </h3>
+                <p class="text-slate-500 text-sm mb-6 line-clamp-3 text-left">
+                  {plan.description || "島の自然と歴史を満喫する、オリジナルの旅行プランをご提案いたします。"}
+                </p>
+                <div class="mt-auto flex items-end justify-between">
+                  <div>
+                    <span class="text-xs text-slate-400 block mb-1">お一人様あたり</span>
+                    <span class="text-2xl font-bold text-ocean-700">{plan.price.toLocaleString()}</span>
+                    <span class="text-sm font-bold text-ocean-700 ml-1">円〜</span>
+                  </div>
+                  <div class="px-4 py-2 rounded-lg bg-ocean-50 text-ocean-700 text-sm font-bold transition-colors group-hover:bg-ocean-700 group-hover:text-white">
+                    詳細を見る
+                  </div>
+                </div>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20 bg-white rounded-2xl border border-slate-100 shadow-sm">
+         <div class="text-6xl mb-6">🏝️</div>
+         <h2 class="text-2xl font-bold text-slate-800 mb-4">現在、募集中の企画はございません</h2>
+         <p class="text-slate-500 mb-8">誠に恐れ入りますが、後ほど再度ご確認ください。</p>
+         <a href={normalizedBase} class="btn btn-outline">トップページに戻る</a>
+      </div>
     )}
   </div>
-
-  <style>
-    .page-content {
-      padding: 4rem 1.5rem;
-    }
-
-    .page-title {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .page-description {
-      text-align: center;
-      color: #666;
-      max-width: 600px;
-      margin: 0 auto 4rem;
-    }
-
-    .plan-list-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .plan-item-card {
-      text-decoration: none;
-      color: inherit;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .plan-item-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      border-color: var(--primary);
-    }
-
-    .card-body {
-      padding: 2rem;
-      flex-grow: 1;
-    }
-
-    .card-body h3 {
-      margin: 0 0 1rem;
-      font-size: 1.4rem;
-      line-height: 1.4;
-    }
-
-    .plan-price-large {
-      font-size: 1rem;
-      color: #555;
-    }
-
-    .plan-price-large span {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary);
-    }
-
-    .card-footer {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .btn-text {
-      color: var(--primary);
-      font-weight: bold;
-      font-size: 0.9rem;
-    }
-
-    .no-data {
-        text-align: center;
-        padding: 4rem;
-        color: #888;
-    }
-
-    @media (max-width: 768px) {
-      .page-title {
-        font-size: 2rem;
-      }
-    }
-  </style>
 </BaseLayout>

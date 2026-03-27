@@ -3,52 +3,122 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 ---
 
-<BaseLayout title="よくある質問・お問い合わせ">
-  <div class="container page-content">
-    <h1 class="page-title">よくある質問・お問い合わせ</h1>
+<BaseLayout title="FAQ・お問い合わせ">
+  <section class="bg-ocean-700 py-20 text-white">
+    <div class="container text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">FAQ・お問い合わせ</h1>
+      <p class="text-ocean-100 max-w-2xl mx-auto text-lg font-light">
+        ご不明な点がございましたら、まずはよくある質問をご確認ください。<br class="hidden md:block"/>
+        解決しない場合は、わかさ旅行センター専用フォームよりお気軽にお問い合わせください。
+      </p>
+    </div>
+  </section>
 
+  <div class="container py-20 max-w-4xl">
     <!-- FAQ Section -->
-    <section class="faq-section">
-      <h2 class="section-subtitle">よくある質問</h2>
-      <div class="faq-grid">
-        <div class="faq-item">
-          <div class="faq-q">Q. 予約のキャンセルはいつまで可能ですか？</div>
-          <div class="faq-a">A. 旅行開始日の21日前までは無料でキャンセル可能です。それ以降は所定のキャンセル料が発生いたします。詳細は旅行条件書をご確認ください。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Q. 一人でも参加可能ですか？</div>
-          <div class="faq-a">A. はい、一部のプランを除き、お一人様からご参加いただけます。ただし、お一人様利用の追加料金が発生する場合がございます。</div>
-        </div>
-        <div class="faq-item">
-          <div class="faq-q">Q. 小学生以下の料金設定はありますか？</div>
-          <div class="faq-a">A. はい、お子様料金を設定しているプランがございます。シミュレーターで人数を選択する際に対象の方を含めて計算してください。</div>
-        </div>
+    <section class="mb-24">
+      <h2 class="section-title">よくある質問</h2>
+      <div class="space-y-4">
+        <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300" open>
+          <summary class="list-none p-6 cursor-pointer flex justify-between items-center font-bold text-slate-800 hover:bg-slate-50">
+            <span>Q. 予約のキャンセルはいつまで可能ですか？</span>
+            <span class="w-6 h-6 flex items-center justify-center rounded-full bg-ocean-50 text-ocean-600 transition-transform group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-6 pb-6 text-slate-600 leading-relaxed border-t border-slate-50 pt-4">
+            旅行開始日の21日前までは無料でキャンセル可能です。それ以降は所定のキャンセル料が発生いたします。詳細は「旅行条件書」をご確認ください。
+          </div>
+        </details>
+
+        <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+          <summary class="list-none p-6 cursor-pointer flex justify-between items-center font-bold text-slate-800 hover:bg-slate-50">
+            <span>Q. 一人でも参加可能ですか？</span>
+            <span class="w-6 h-6 flex items-center justify-center rounded-full bg-ocean-50 text-ocean-600 transition-transform group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-6 pb-6 text-slate-600 leading-relaxed border-t border-slate-50 pt-4">
+            はい、一部のプランを除き、お一人様からご参加いただけます。ただし、お一人様利用の追加料金が発生する場合がございますので、各プランの詳細ページにてご確認ください。
+          </div>
+        </details>
+
+        <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300">
+          <summary class="list-none p-6 cursor-pointer flex justify-between items-center font-bold text-slate-800 hover:bg-slate-50">
+            <span>Q. 領収書の発行は可能ですか？</span>
+            <span class="w-6 h-6 flex items-center justify-center rounded-full bg-ocean-50 text-ocean-600 transition-transform group-open:rotate-180">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-6 pb-6 text-slate-600 leading-relaxed border-t border-slate-50 pt-4">
+            はい、可能です。ご予約時、または当日に窓口にてお申し付けください。
+          </div>
+        </details>
       </div>
     </section>
 
     <!-- Contact Form Section -->
-    <section class="contact-section">
-      <h2 class="section-subtitle">総合お問い合わせフォーム</h2>
-      <p class="contact-desc">サービスに関するご質問や、団体旅行のご相談など、お気軽にお問い合わせください。</p>
-      
-      <div class="contact-form-wrapper">
-        <form id="general-contact-form">
-          <div class="form-group">
-            <label>お名前 (必須)</label>
-            <input type="text" name="name" required />
-          </div>
-          <div class="form-group">
-            <label>メールアドレス (必須)</label>
-            <input type="email" name="email" required />
-          </div>
-          <div class="form-group">
-            <label>お問い合わせ内容 (必須)</label>
-            <textarea name="message" rows="6" required></textarea>
+    <section>
+      <h2 class="section-title">総合お問い合わせフォーム</h2>
+      <div class="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-ocean-50 rounded-full -mr-16 -mt-16 -z-10"></div>
+        
+        <form id="general-contact-form" class="space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-2">
+              <label class="block text-sm font-bold text-slate-700">お名前 <span class="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                name="name" 
+                required 
+                placeholder="例：山田 太郎" 
+                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 outline-none transition-all placeholder:text-slate-400"
+              />
+            </div>
+            <div class="space-y-2">
+              <label class="block text-sm font-bold text-slate-700">メールアドレス <span class="text-red-500">*</span></label>
+              <input 
+                type="email" 
+                name="email" 
+                required 
+                placeholder="info@ichimaru-grp.jp" 
+                class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 outline-none transition-all"
+              />
+            </div>
           </div>
           
-          <button type="submit" id="contact-submit" class="contact-btn">内容を送信する</button>
+          <div class="space-y-2">
+            <label class="block text-sm font-bold text-slate-700">お問い合わせ内容 <span class="text-red-500">*</span></label>
+            <textarea 
+              name="message" 
+              rows="6" 
+              required 
+              placeholder="ご質問、ご要望などをご記入ください。" 
+              class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-ocean-500 focus:border-ocean-500 outline-none transition-all resize-none"
+            ></textarea>
+          </div>
+          
+          <div class="pt-4 text-center">
+            <button 
+              type="submit" 
+              id="contact-submit" 
+              class="btn btn-primary w-full md:w-auto md:min-w-[300px] text-lg py-4 shadow-ocean-200 shadow-lg hover:translate-y-[-2px] active:translate-y-0"
+            >
+              お問い合わせを送信する
+            </button>
+            <p class="text-[10px] text-slate-400 mt-6 leading-relaxed">
+              This site is protected by reCAPTCHA and the Google 
+              <a href="https://policies.google.com/privacy" class="underline hover:text-ocean-600">Privacy Policy</a> and 
+              <a href="https://policies.google.com/terms" class="underline hover:text-ocean-600">Terms of Service</a> apply.
+            </p>
+          </div>
         </form>
-        <p class="recaptcha-notice">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
       </div>
     </section>
   </div>
@@ -61,57 +131,20 @@ const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       btn.disabled = true;
+      const originalText = btn.textContent;
       btn.textContent = '送信中...';
 
       try {
         const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact' });
-        // NOTE: 実際にはここでGAS等へ送信処理を行います
         console.log('reCAPTCHA token acquired:', token);
         alert('お問い合わせを受け付けました。後ほど担当者よりご連絡いたします。');
         form.reset();
       } catch (err) {
-        alert('送信に失敗しました。');
+        alert('送信に失敗しました。お手数ですが、後ほど再度お試しいただくかお電話にてお問い合わせください。');
       } finally {
         btn.disabled = false;
-        btn.textContent = '内容を送信する';
+        btn.textContent = originalText;
       }
     });
   </script>
-
-  <style>
-    .page-content { padding: 4rem 1.5rem; }
-    .page-title { font-size: 2.5rem; text-align: center; margin-bottom: 4rem; }
-    .section-subtitle { font-size: 1.75rem; border-bottom: 2px solid var(--primary); padding-bottom: 0.5rem; margin-bottom: 2rem; }
-
-    /* FAQ */
-    .faq-section { margin-bottom: 5rem; }
-    .faq-grid { display: flex; flex-direction: column; gap: 1.5rem; }
-    .faq-item { background: var(--light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--primary); }
-    .faq-q { font-weight: bold; color: var(--dark); margin-bottom: 0.5rem; }
-    .faq-a { font-size: 0.95rem; color: #555; }
-
-    /* Contact */
-    .contact-desc { margin-bottom: 2rem; color: #666; }
-    .contact-form-wrapper { background: #fff; border: 1px solid var(--border); padding: 2.5rem; border-radius: 12px; }
-    .form-group { margin-bottom: 1.5rem; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; }
-    .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
-    
-    .contact-btn {
-      width: 100%;
-      padding: 1rem;
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .contact-btn:hover { background: var(--primary-hover); }
-    .contact-btn:disabled { background: #ccc; cursor: not-allowed; }
-
-    .recaptcha-notice { font-size: 0.75rem; color: #999; margin-top: 1rem; text-align: center; }
-  </style>
 </BaseLayout>

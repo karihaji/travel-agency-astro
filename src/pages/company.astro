@@ -1,118 +1,158 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
+const normalizedBase = base.endsWith('/') ? base : base + '/';
 ---
 
-<BaseLayout title="会社概要">
-  <div class="container page-content">
-    <h1 class="page-title">会社概要・法的表記</h1>
+<BaseLayout title="会社案内">
+  <section class="bg-ocean-800 py-20 text-white">
+    <div class="container">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">会社案内</h1>
+      <p class="text-ocean-100 font-light">熊毛海陸運送株式会社 わかさ旅行センター</p>
+    </div>
+  </section>
 
-    <section class="content-section">
-      <h2 class="section-subtitle">企業情報</h2>
-      <table class="info-table">
-        <tr>
-          <th>社名</th>
-          <td>サンライズ旅行社株式会社 (Sunrise Travel Agency Co., Ltd.)</td>
-        </tr>
-        <tr>
-          <th>設立</th>
-          <td>1990年4月1日</td>
-        </tr>
-        <tr>
-          <th>資本金</th>
-          <td>3,000万円</td>
-        </tr>
-        <tr>
-          <th>代表者</th>
-          <td>代表取締役社長　日向 太郎</td>
-        </tr>
-        <tr>
-          <th>本社所在地</th>
-          <td>〒100-0001 東京都千代田区千代田1-1</td>
-        </tr>
-      </table>
-    </section>
+  <div class="container py-20">
+    <!-- Company Profile Header -->
+    <div class="mb-16 max-w-3xl">
+       <h2 class="text-3xl font-black text-slate-900 mb-6">島と人を繋ぐ架け橋として</h2>
+       <p class="text-slate-600 leading-relaxed text-lg">
+         わかさ旅行センターは、市丸グループの一員である熊毛海陸運送株式会社が運営する旅行部門です。
+         「フェリープリンセスわかさ」「フェリー屋久島2」「種子屋久高速船」に関連し、種子島・屋久島の観光振興を通じて地域の発展に貢献してまいります。
+       </p>
+    </div>
 
-    <section class="content-section">
-      <h2 class="section-subtitle">旅行業の法定標識</h2>
-      <div class="legal-sign">
-        <table class="sign-table">
-          <tr>
-            <th colspan="2">旅行業登録票</th>
-          </tr>
-          <tr>
-            <th>業務範囲</th>
-            <td>海外旅行・国内旅行</td>
-          </tr>
-          <tr>
-            <th>登録番号</th>
-            <td>東京都知事登録旅行業第2-12345号</td>
-          </tr>
-          <tr>
-            <th>登録年月日</th>
-            <td>2010年5月20日</td>
-          </tr>
-          <tr>
-            <th>有効期限</th>
-            <td>2025年5月19日まで</td>
-          </tr>
-          <tr>
-            <th>氏名又は名称</th>
-            <td>サンライズ旅行社株式会社</td>
-          </tr>
-          <tr>
-            <th>営業所の名称</th>
-            <td>本社営業所</td>
-          </tr>
-          <tr>
-            <th>旅行業務取扱管理者</th>
-            <td>山田 花子</td>
-          </tr>
-        </table>
+    <!-- Office Locations -->
+    <section class="mb-20">
+      <h2 class="section-title">営業所・お問い合わせ先</h2>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Nishinoomote -->
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-slate-50 py-4 px-8 border-b border-slate-100 flex justify-between items-center">
+             <h3 class="font-black text- ocean-900 text-lg">本社営業所（種子島・西之表）</h3>
+             <span class="px-2 py-1 bg-ocean-600 text-white text-[10px] font-bold rounded uppercase tracking-tighter">Island Side</span>
+          </div>
+          <div class="p-8 space-y-4">
+             <p class="text-sm text-slate-500 font-medium">種子島島内でのチケット受け取り、観光案内を担当しております。港近くの便利な立地です。</p>
+             <div class="pt-4 border-t border-slate-100 space-y-3">
+                <div class="flex items-start gap-3">
+                   <div class="text-ocean-600 mt-1">📍</div>
+                   <p class="text-slate-700">〒891-3111<br/>鹿児島県西之表市栄町1番地</p>
+                </div>
+                <div class="flex items-center gap-3">
+                   <div class="text-ocean-600">📞</div>
+                   <p class="text-xl font-black text-slate-900">0997-22-2333</p>
+                </div>
+                <div class="text-xs text-slate-400">営業時間: 08:00〜17:00（日・祝定休）</div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Kagoshima -->
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+          <div class="bg-slate-50 py-4 px-8 border-b border-slate-100 flex justify-between items-center">
+             <h3 class="font-black text-ocean-900 text-lg">鹿児島本店営業所</h3>
+             <span class="px-2 py-1 bg-sand-600 text-white text-[10px] font-bold rounded uppercase tracking-tighter">Main Portal</span>
+          </div>
+          <div class="p-8 space-y-4">
+             <p class="text-sm text-slate-500 font-medium">全国各地から種子島・屋久島へお越しのお客様の送客・プランニングを担当しております。</p>
+             <div class="pt-4 border-t border-slate-100 space-y-3">
+                <div class="flex items-start gap-3">
+                   <div class="text-ocean-600 mt-1">📍</div>
+                   <p class="text-slate-700">〒892-0814<br/>鹿児島市本港新町6番地（南埠頭旅客ターミナル内）</p>
+                </div>
+                <div class="flex items-center gap-3">
+                   <div class="text-ocean-600">📞</div>
+                   <p class="text-xl font-black text-slate-900">099-224-7195</p>
+                </div>
+                <div class="text-xs text-slate-400">FAX: 099-223-3700</div>
+             </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="content-section">
-      <h2 class="section-subtitle">各種規約・ポリシー</h2>
-      <ul class="document-list">
-        <li><a href="#" class="doc-link">旅行条件書 (PDF形式)</a></li>
-        <li><a href="#" class="doc-link">個人情報保護方針 (PDF形式)</a></li>
-      </ul>
+    <!-- Services -->
+    <section class="mb-20">
+      <h2 class="section-title">取扱業務</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+         {[
+           "国内募集型企画旅行", "パッケージツアー", "JR乗車券手配", "国内航空券手配",
+           "ホテル・旅館予約", "貸切バス・レンタカー", "団体旅行プランニング", "観光ガイド紹介"
+         ].map(s => (
+           <div class="p-4 bg-ocean-50 rounded-xl border border-ocean-100 text-center font-bold text-ocean-800 text-sm">
+             {s}
+           </div>
+         ))}
+      </div>
+    </section>
+
+    <!-- Legal Notice -->
+    <section id="legal" class="mb-20">
+      <h2 class="section-title">旅行業の法定標識</h2>
+      <div class="bg-white rounded-2xl border-2 border-ocean-700 overflow-hidden shadow-md max-w-3xl mx-auto">
+        <div class="bg-ocean-700 text-white py-4 px-8 text-center font-bold text-xl tracking-widest">
+            旅行業登録票
+        </div>
+        <table class="w-full text-left border-collapse">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 w-1/2 font-bold text-slate-700">業務範囲</th>
+              <td class="py-4 px-8 text-slate-600">国内旅行</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">登録番号</th>
+              <td class="py-4 px-8 text-slate-600">鹿児島県知事登録旅行業第2-243号</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">登録年月日</th>
+              <td class="py-4 px-8 text-slate-600">平成26年7月30日</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">有効期限</th>
+              <td class="py-4 px-8 text-slate-600">令和11年7月29日まで</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">氏名又は名称</th>
+              <td class="py-4 px-8 text-slate-600 font-bold">熊毛海陸運送株式会社</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">営業所の名称</th>
+              <td class="py-4 px-8 text-slate-600 font-bold">わかさ旅行センター</td>
+            </tr>
+            <tr>
+              <th class="py-4 px-8 bg-slate-50 font-bold text-slate-700">旅行業務取扱管理者</th>
+              <td class="py-4 px-8 text-slate-600 line-through decoration-slate-300">日高 政信</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-center text-xs text-slate-400 mt-4">※旅行業務取扱管理者とは、お客様の旅行を取り扱う営業所での取引に関する責任者です。</p>
+    </section>
+
+    <!-- Documents -->
+    <section id="policy">
+      <h2 class="section-title">約款・ポリシー</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <a href="https://ichimaru-grp.jp/wp-content/uploads/2021/03/yakkan_domestic.pdf" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-xl border border-slate-200 hover:border-ocean-300 hover:bg-ocean-50 transition-all group shadow-sm">
+           <span class="font-bold text-slate-800">標準旅行業約款</span>
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-ocean-600">
+             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+           </svg>
+        </a>
+        <a href="#" class="flex items-center justify-between p-6 bg-white rounded-xl border border-slate-200 hover:border-ocean-300 hover:bg-ocean-50 transition-all group shadow-sm">
+           <span class="font-bold text-slate-800">旅行条件書</span>
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-ocean-600">
+             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+           </svg>
+        </a>
+        <a href="https://ichimaru-grp.jp/privacy" target="_blank" class="flex items-center justify-between p-6 bg-white rounded-xl border border-slate-200 hover:border-ocean-300 hover:bg-ocean-50 transition-all group shadow-sm">
+           <span class="font-bold text-slate-800">個人情報保護方針</span>
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 text-slate-300 group-hover:text-ocean-600">
+             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+           </svg>
+        </a>
+      </div>
     </section>
   </div>
-
-  <style>
-    .page-content { padding: 4rem 1.5rem; }
-    .page-title { font-size: 2.5rem; text-align: center; margin-bottom: 4rem; }
-    .section-subtitle { font-size: 1.5rem; border-left: 6px solid var(--primary); padding-left: 1rem; margin-bottom: 1.5rem; }
-
-    .content-section { margin-bottom: 4rem; }
-
-    .info-table, .sign-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 2rem;
-    }
-
-    .info-table th, .info-table td, .sign-table th, .sign-table td {
-      border: 1px solid var(--border);
-      padding: 1rem;
-      text-align: left;
-    }
-
-    .info-table th { width: 30%; background: var(--light); }
-    .sign-table th { width: 40%; background: var(--light); }
-
-    .document-list { list-style: none; padding: 0; }
-    .document-list li { margin-bottom: 1rem; }
-    .doc-link { color: var(--primary); text-decoration: none; font-weight: bold; border-bottom: 1px solid var(--primary); }
-    .doc-link:hover { color: var(--primary-hover); }
-
-    @media (max-width: 600px) {
-      .info-table th, .info-table td, .sign-table th, .sign-table td {
-        display: block;
-        width: 100%;
-      }
-      .info-table th, .sign-table th { border-bottom: none; }
-    }
-  </style>
 </BaseLayout>

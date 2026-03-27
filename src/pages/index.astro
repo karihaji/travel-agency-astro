@@ -7,233 +7,213 @@ const plans = allPlans.slice(0, 5);
 const hasMore = allPlans.length > 5;
 const base = import.meta.env.BASE_URL;
 const normalizedBase = base.endsWith('/') ? base : base + '/';
+
+// Image mapping helper
+const planImages = [
+  `${normalizedBase}images/plans/yakushima.png`,
+  `${normalizedBase}images/plans/tanegashima.png`,
+  `${normalizedBase}images/plans/ferry.png`,
+];
+
+const getPlanImage = (index: number) => planImages[index % planImages.length];
 ---
 
 <BaseLayout title="ホーム">
   <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-      <h1>特別な旅を、あなたに。</h1>
-      <p>サンライズ旅行社が提案する、こころ動かす感動の旅路。</p>
-      <a href={`${normalizedBase}plans`} class="btn btn-primary">プラン一覧を見る</a>
+  <section class="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <img 
+        src={`${normalizedBase}hero.png`} 
+        alt="Hero Background" 
+        class="w-full h-full object-cover scale-105 animate-pulse-slow"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-ocean-900/80 to-ocean-800/40"></div>
+    </div>
+    
+    <div class="container relative z-10 text-center text-white">
+      <div class="inline-block px-4 py-1 mb-6 border border-white/30 rounded-full bg-white/10 backdrop-blur-sm text-sm tracking-widest uppercase">
+        Wakasa Travel Center
+      </div>
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-black mb-8 leading-tight drop-shadow-2xl text-white">
+        種子島・屋久島の旅行なら、<br class="hidden sm:block"/>
+        <span class="text-sand-100 italic">市丸グループ</span>の<br class="hidden sm:block"/>
+        わかさ旅行センターにお任せください
+      </h1>
+      <p class="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-ocean-50/90 leading-relaxed font-light">
+        種子島・屋久島の観光振興の発展を願って。<br class="hidden md:block"/>
+        島々を熟知したプロフェッショナルが、心に刻まれる最高の島旅をプロデュースいたします。
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href={`${normalizedBase}plans/`} class="btn btn-primary text-lg px-8">
+          旅行企画一覧を見る
+        </a>
+        <a href={`${normalizedBase}company/`} class="btn bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/30 px-8">
+          会社概要
+        </a>
+      </div>
+    </div>
+    
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-white/50">
+         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+       </svg>
     </div>
   </section>
 
-  <!-- Company Summary -->
-  <section class="company-intro">
+  <!-- About Section -->
+  <section id="about" class="py-24 bg-white overflow-hidden">
     <div class="container">
-      <div class="intro-grid">
-        <div class="intro-text">
-          <h2 class="section-title">私たちについて</h2>
-          <p>サンライズ旅行社は、創業以来「一生の思い出に残る旅」を提供し続けています。厳選された宿泊施設と、お客様一人ひとりに合わせた最適なプランニングで、高品質な旅の体験をお約束します。</p>
-          <a href={`${normalizedBase}company`} class="text-link">会社案内はこちら &rarr;</a>
-        </div>
-        <div class="intro-visual">
-          <div class="visual-box">
-             <img src={`${normalizedBase}hero.png`} alt="Travel Visual" />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+        <div class="relative">
+          <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl relative z-10">
+            <img src={`${normalizedBase}images/plans/yakushima.png`} alt="屋久島の自然" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700" />
           </div>
+          <div class="absolute -bottom-6 -right-6 w-64 h-64 bg-sand-100 rounded-3xl -z-10 hidden md:block"></div>
+          <div class="absolute -top-6 -left-6 w-32 h-32 bg-ocean-100 rounded-full -z-10 blur-2xl opacity-60"></div>
+        </div>
+        
+        <div class="order-2 lg:order-1">
+          <h2 class="section-title">私たちについて</h2>
+          <div class="space-y-6 text-slate-600 leading-relaxed text-lg">
+            <p>
+              わかさ旅行センター（熊毛海陸運送株式会社）は、種子島航路「フェリープリンセスわかさ」、屋久島航路「フェリー屋久島2」、および「種子屋久高速船」の関連会社として運営されています。
+            </p>
+            <div class="font-bold text-ocean-900 border-l-4 border-ocean-600 pl-4 py-2 bg-ocean-50/50 rounded-r-xl">
+              種子島島内の取扱は本社営業所、種子島・屋久島へのお客様は鹿児島本店営業所が担当いたしております。
+            </div>
+            <p>
+              市丸グループの一員として、国内旅行・パッケージ旅行・JR券・航空券・ホテル手配など、島旅から全国旅行まで幅広く対応。お気軽にご相談ください。
+            </p>
+          </div>
+          
+          <div class="mt-10 grid grid-cols-2 gap-x-8 gap-y-4">
+            {[
+              "国内パッケージ旅行", "JR券・航空券手配", "宿泊・ホテル予約", "貸切バス・レンタカー"
+            ].map(service => (
+              <div class="flex items-center gap-2 text-sm font-bold text-slate-700">
+                <span class="text-ocean-500 font-black">✔</span> {service}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Office Info Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-6 group hover:bg-white hover:shadow-xl transition-all duration-500">
+           <div class="w-14 h-14 bg-ocean-600 rounded-xl flex items-center justify-center text-white text-2xl flex-shrink-0 shadow-lg shrink-0">📍</div>
+           <div>
+              <h3 class="font-black text-slate-900 text-lg mb-1">本社営業所（西之表）</h3>
+              <p class="text-sm text-slate-500 mb-4 tracking-tight">種子島島内のチケット受け取り・観光案内</p>
+              <div class="flex items-center gap-2 text-ocean-700 font-black text-xl">
+                 <span class="text-xs font-normal text-slate-400 mr-1 italic">TEL</span> 0997-22-2333
+              </div>
+           </div>
+        </div>
+        <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100 flex items-start gap-6 group hover:bg-white hover:shadow-xl transition-all duration-500 border-l-4 border-l-sand-400">
+           <div class="w-14 h-14 bg-sand-600 rounded-xl flex items-center justify-center text-white text-2xl flex-shrink-0 shadow-lg shrink-0">🏛️</div>
+           <div>
+              <h3 class="font-black text-slate-900 text-lg mb-1">鹿児島本店営業所</h3>
+              <p class="text-sm text-slate-500 mb-4 tracking-tight">全国からの送客・プランニング窓口</p>
+              <div class="flex items-center gap-2 text-ocean-700 font-black text-xl">
+                 <span class="text-xs font-normal text-slate-400 mr-1 italic">TEL</span> 099-224-7195
+              </div>
+           </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Featured Plans -->
-  <section class="featured-plans">
+  <section class="py-24 bg-slate-50">
     <div class="container">
-      <h2 class="section-title">おすすめの旅行企画</h2>
-      <div class="plan-grid">
-        {plans.slice(0, 5).map((plan) => (
-          <a href={`${normalizedBase}plans/${plan.id}`} class="plan-card">
-            <div class="plan-card-body">
-              <h3>{plan.title}</h3>
-              <p class="plan-price">基本料金: <span>{plan.price.toLocaleString()}円</span></p>
-              <span class="view-detail">詳細を見る &rarr;</span>
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div>
+          <h2 class="section-title">おすすめの旅行企画</h2>
+          <p class="text-slate-500">厳選された屋久島・種子島のプランをご案内いたします。</p>
+        </div>
+        <a href={`${normalizedBase}plans/`} class="text-ocean-700 font-bold flex items-center gap-2 group">
+          すべてのプランを見る
+          <span class="transition-transform group-hover:translate-x-2">&rarr;</span>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {plans.map((plan, index) => (
+          <a href={`${normalizedBase}plans/${plan.id}/`} class="group h-full">
+            <div class="card h-full flex flex-col hover:border-ocean-300 hover:shadow-xl group-hover:-translate-y-2">
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <img 
+                  src={getPlanImage(index)} 
+                  alt={plan.title} 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-ocean-800 shadow-sm">
+                  おすすめ
+                </div>
+              </div>
+              <div class="p-6 flex-grow flex flex-col">
+                <h3 class="text-xl font-bold mb-3 text-slate-900 group-hover:text-ocean-700 transition-colors line-clamp-2 text-left">
+                  {plan.title}
+                </h3>
+                <p class="text-slate-500 text-sm mb-6 line-clamp-3 text-left">
+                  {plan.description || "島の自然と歴史を満喫する、オリジナルの旅行プランをご提案いたします。"}
+                </p>
+                <div class="mt-auto flex items-end justify-between">
+                  <div>
+                    <span class="text-xs text-slate-400 block mb-1">お一人様あたり</span>
+                    <span class="text-2xl font-bold text-ocean-700">{plan.price.toLocaleString()}</span>
+                    <span class="text-sm font-bold text-ocean-700 ml-1">円〜</span>
+                  </div>
+                  <div class="w-10 h-10 rounded-full bg-ocean-50 flex items-center justify-center text-ocean-600 transition-colors group-hover:bg-ocean-700 group-hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </a>
         ))}
       </div>
 
       {hasMore && (
-        <div class="more-plans-link">
-          <a href={`${normalizedBase}plans`} class="btn btn-outline">すべての旅行企画を見る</a>
+        <div class="mt-16 text-center">
+          <a href={`${normalizedBase}plans/`} class="btn btn-outline min-w-[240px]">
+            すべての旅行企画を見る
+          </a>
         </div>
       )}
     </div>
   </section>
 
-  <style>
-    /* Hero */
-    .hero {
-      position: relative;
-      height: 60vh;
-      min-height: 400px;
-      background-image: url('/travel-agency-astro/hero.png');
-      background-size: cover;
-      background-position: center;
-      display: flex;
-      align-items: center;
-      color: #fff;
-      margin-bottom: 4rem;
-    }
-
-    .hero-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      margin-bottom: 2rem;
-    }
-
-    /* Intro */
-    .intro-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-      margin-bottom: 4rem;
-    }
-
-    .visual-box img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-
-    /* Section Title */
-    .section-title {
-      font-size: 1.75rem;
-      margin-bottom: 2rem;
-      position: relative;
-      display: inline-block;
-    }
-
-    .section-title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 0;
-      width: 50px;
-      height: 3px;
-      background: var(--primary);
-    }
-
-    /* Plan Grid */
-    .plan-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .plan-card {
-      text-decoration: none;
-      color: inherit;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    .plan-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-    }
-
-    .plan-info {
-      padding: 1.5rem;
-    }
-
-    .plan-info h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
-      color: var(--dark);
-    }
-
-    .plan-price {
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .plan-price span {
-      font-weight: bold;
-      color: var(--primary);
-      font-size: 1.1rem;
-    }
-
-    .view-detail {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-      color: var(--primary);
-      font-size: 0.9rem;
-    }
-
-    /* Common Components */
-    .btn {
-      display: inline-block;
-      padding: 0.75rem 2rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.2s;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-hover);
-    }
-
-    .btn-outline {
-      border: 2px solid var(--primary);
-      color: var(--primary);
-    }
-
-    .btn-outline:hover {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .view-all {
-        text-align: center;
-    }
-
-    .text-link {
-        color: var(--primary);
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    @media (max-width: 768px) {
-      .intro-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-      .hero h1 {
-        font-size: 2rem;
-      }
-    }
-  </style>
+  <!-- CTA Section -->
+  <section class="py-24 bg-ocean-800 text-white overflow-hidden relative">
+    <div class="absolute inset-x-0 top-0 h-1 bg-sand-100/30"></div>
+    <div class="container relative z-10 text-center">
+       <h2 class="text-3xl md:text-4xl font-bold mb-8 italic">さあ、島旅の物語を始めましょう。</h2>
+       <p class="text-ocean-100 mb-12 max-w-2xl mx-auto">
+         旅のシミュレーションからご予約まで、オンラインで簡単にお手続きいただけます。
+         ご不明な点は、お気軽にお問い合わせください。
+       </p>
+       <div class="flex flex-col sm:flex-row justify-center gap-6">
+          <a href={`${normalizedBase}faq-contact/`} class="btn bg-white text-ocean-900 hover:bg-ocean-50">
+            お問い合わせはこちら
+          </a>
+          <a href="tel:0997-22-2333" class="btn border-2 border-white hover:bg-white/10">
+            お電話: 0997-22-2333
+          </a>
+       </div>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  @keyframes pulse-slow {
+    0%, 100% { transform: scale(1.05); }
+    50% { transform: scale(1.1); }
+  }
+  .animate-pulse-slow {
+    animation: pulse-slow 15s ease-in-out infinite;
+  }
+</style>

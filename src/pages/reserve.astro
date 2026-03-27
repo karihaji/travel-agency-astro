@@ -1,150 +1,258 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getTravelPlan } from '../lib/microcms';
 
-const { searchParams } = Astro.url;
-const planId = searchParams.get('id');
-const adultCount = searchParams.get('adult');
-const childCount = searchParams.get('child');
-const departureDate = searchParams.get('departure');
-const totalAmount = searchParams.get('total');
-
-const plan = planId ? await getTravelPlan(planId) : null;
 const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
-const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
 const base = import.meta.env.BASE_URL;
 const normalizedBase = base.endsWith('/') ? base : base + '/';
 ---
 
 <BaseLayout title="ご予約画面">
-  <div class="container page-content">
-    <div class="reservation-container">
-      <h1 class="page-title">ご予約フォーム</h1>
+  <section class="bg-ocean-800 py-12 text-white">
+    <div class="container text-center">
+      <h1 class="text-3xl md:text-4xl font-bold">お申し込みフォーム</h1>
+    </div>
+  </section>
 
-      {!plan ? (
-        <div class="error-msg">
-          <p>プラン情報が見つかりません。一覧から再度プランを選択してください。</p>
-          <a href={`${normalizedBase}plans`} class="btn btn-outline">一覧に戻る</a>
+  <div class="container py-12">
+    <div id="no-plan-error" class="max-w-2xl mx-auto p-12 bg-white rounded-3xl border border-slate-200 text-center shadow-xl hidden">
+      <div class="text-5xl mb-6">⚠️</div>
+      <h2 class="text-xl font-bold text-slate-800 mb-4">プラン情報が見つかりません</h2>
+      <p class="text-slate-500 mb-8 text-sm leading-relaxed">セッションがタイムアウトしたか、不正なアクセスです。<br/>お手数ですが一覧から再度プランを選択してください。</p>
+      <a href={`${normalizedBase}plans/`} class="btn btn-primary inline-flex items-center gap-2">
+         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+           <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+         </svg>
+         企画一覧に戻る
+      </a>
+    </div>
+
+    <div id="reservation-container" class="max-w-4xl mx-auto opacity-0 transition-opacity duration-500">
+      <!-- Plan Summary Header -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 mb-12 border-l-8 border-l-ocean-600">
+         <div>
+            <span class="text-xs font-bold text-ocean-600 uppercase tracking-widest block mb-1">お申し込み内容</span>
+            <h2 id="plan-title-display" class="text-xl md:text-2xl font-black text-slate-900 leading-tight">--</h2>
+            <div class="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-500 font-medium">
+               <span class="flex items-center gap-2 italic">📅 出発予定日: <strong id="departure-display" class="text-slate-800 not-italic">--</strong></span>
+               <span class="flex items-center gap-2 italic">👥 参加人数: <strong id="participants-display" class="text-slate-800 not-italic">大人 --名 / 小人 --名</strong></span>
+            </div>
+         </div>
+         <div class="text-center md:text-right bg-ocean-50 px-6 py-4 rounded-xl border border-ocean-100">
+            <span class="text-xs text-ocean-600 block mb-1 font-bold">概算合計金額</span>
+            <div class="flex items-baseline justify-center md:justify-end gap-1">
+               <span id="total-display" class="text-3xl font-black text-ocean-800 tracking-tight">--</span>
+               <span class="text-sm font-bold text-ocean-800">円</span>
+            </div>
+         </div>
+      </div>
+
+      <div class="relative bg-white rounded-3xl border border-slate-200 shadow-2xl overflow-hidden min-h-[600px]">
+        <!-- Step Indicator -->
+        <div class="flex items-center justify-between px-8 md:px-20 py-10 bg-slate-50 border-b border-slate-100">
+           {[1, 2, 3, 4].map((s) => (
+              <div class="flex flex-col items-center gap-2 relative z-10 flex-1 last:flex-none">
+                <div 
+                  id={`step-dot-${s}`} 
+                  class={`step-dot w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all duration-300 ${s === 1 ? 'bg-ocean-600 text-white shadow-lg shadow-ocean-200' : 'bg-white border-2 border-slate-200 text-slate-300'}`}
+                >
+                  {s}
+                </div>
+                {s < 4 && <div id={`divider-${s}`} class="step-divider absolute left-[calc(50%+20px)] right-[-50%] top-5 h-0.5 bg-slate-200 -z-10"></div>}
+              </div>
+           ))}
         </div>
-      ) : (
-        <div class="reservation-wrapper">
-          <div class="plan-summary-bar">
-             <h2>{plan.title}</h2>
-             <div class="summary-details">
-                <span>出発日: {departureDate}</span>
-                <span>人数: 大人{adultCount}名 / 小人{childCount}名</span>
-                <span class="total-price">合計金額: {Number(totalAmount).toLocaleString()}円</span>
-             </div>
-          </div>
 
-          <div class="form-stepper">
-            <div class="step active" id="step-dot-1">1</div>
-            <div class="step-divider"></div>
-            <div class="step" id="step-dot-2">2</div>
-            <div class="step-divider"></div>
-            <div class="step" id="step-dot-3">3</div>
-            <div class="step-divider"></div>
-            <div class="step" id="step-dot-4">4</div>
-          </div>
-
-          <form id="reservation-form">
-            <!-- STEP 1: 代表者情報 -->
-            <div class="form-step" id="step-1">
-              <h3>STEP 1: 代表者情報を入力してください</h3>
-              <div class="form-group">
-                <label>お名前 (フルネーム/漢字)</label>
-                <input type="text" name="representativeName" required placeholder="例：山田 太郎" />
-              </div>
-              <div class="form-group">
-                <label>ふりがな</label>
-                <input type="text" name="representativeKana" required placeholder="例：やまだ たろう" />
-              </div>
-              <div class="form-group">
-                <label>メールアドレス</label>
-                <input type="email" name="email" required placeholder="example@sunrise-travel.jp" />
-              </div>
-              <div class="form-group">
-                <label>電話番号</label>
-                <input type="tel" name="phone" required placeholder="090-0000-0000" />
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-primary next-btn" data-next="2">次へ進む</button>
-              </div>
-            </div>
-
-            <!-- STEP 2: 同行者情報 -->
-            <div class="form-step hidden" id="step-2">
-              <h3>STEP 2: 同行者情報を入力してください</h3>
-              <p class="step-info">代表者様以外の参加者名をご記入ください（任意）。</p>
-              <div class="form-group">
-                <label>同行者1</label>
-                <input type="text" name="companion1" placeholder="同行者のお名前" />
-              </div>
-              <div class="form-group">
-                <label>同行者2</label>
-                <input type="text" name="companion2" placeholder="同行者のお名前" />
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-light prev-btn" data-prev="1">戻る</button>
-                <button type="button" class="btn btn-primary next-btn" data-next="3">次へ進む</button>
-              </div>
-            </div>
-
-            <!-- STEP 3: その他ご要望 -->
-            <div class="form-step hidden" id="step-3">
-              <h3>STEP 3: その他ご要望</h3>
-              <div class="form-group">
-                <label>アレルギーや特記事項など</label>
-                <textarea name="requests" rows="5" placeholder="何かございましたらご記入ください。"></textarea>
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-light prev-btn" data-prev="2">戻る</button>
-                <button type="button" class="btn btn-primary next-btn" data-next="4">入力内容を確認する</button>
-              </div>
-            </div>
-
-            <!-- STEP 4: 確認画面 -->
-            <div class="form-step hidden" id="step-4">
-              <h3>STEP 4: 入力内容の最終確認</h3>
-              <div class="confirmation-box">
-                <p><strong>プラン:</strong> {plan.title}</p>
-                <p><strong>日程:</strong> {departureDate}</p>
-                <p><strong>合計:</strong> {Number(totalAmount).toLocaleString()}円</p>
-                <div id="summary-data"></div>
-              </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-light prev-btn" data-prev="3">戻る</button>
-                <button type="submit" class="btn btn-success" id="submit-btn">予約を確定する</button>
-              </div>
+        <form id="reservation-form" class="p-8 md:p-12">
+          <!-- STEP 1: 代表者情報 -->
+          <div class="form-step space-y-8" id="step-1">
+            <div class="relative">
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">代表者情報</h3>
+              <p class="text-slate-400 text-sm">ご連絡を差し上げる代表者様の情報を入力してください</p>
+              <div class="absolute -left-12 top-2 h-8 w-1 bg-ocean-500 rounded-full hidden md:block"></div>
             </div>
             
-            <!-- Hidden context data -->
-            <input type="hidden" name="planId" value={planId} />
-            <input type="hidden" name="planTitle" value={plan?.title} />
-            <input type="hidden" name="adultCount" value={adultCount} />
-            <input type="hidden" name="childCount" value={childCount} />
-            <input type="hidden" name="departureDate" value={departureDate} />
-            <input type="hidden" name="totalAmount" value={totalAmount} />
-          </form>
-          <p class="recaptcha-notice">This site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">お名前 <span class="text-red-500">*</span></label>
+                <input type="text" name="representativeName" required placeholder="例：山田 太郎" class="form-input" />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">ふりがな <span class="text-red-500">*</span></label>
+                <input type="text" name="representativeKana" required placeholder="例：やまだ たろう" class="form-input" />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">メールアドレス <span class="text-red-500">*</span></label>
+                <input type="email" name="email" required placeholder="info@ichimaru-grp.jp" class="form-input" />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">電話番号 <span class="text-red-500">*</span></label>
+                <input type="tel" name="phone" required placeholder="090-0000-0000" class="form-input" />
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-8">
+              <button type="button" class="btn btn-primary next-btn px-12" data-next="2">同行者情報の入力へ &rarr;</button>
+            </div>
+          </div>
+
+          <!-- STEP 2: 同行者情報 -->
+          <div class="form-step hidden space-y-8" id="step-2">
+            <div class="relative">
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">同行者情報</h3>
+              <p class="text-slate-400 text-sm">代表者様以外の参加者名をご記入ください（任意）</p>
+              <div class="absolute -left-12 top-2 h-8 w-1 bg-ocean-500 rounded-full hidden md:block"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">同行者 1</label>
+                <input type="text" name="companion1" placeholder="お名前をご記入ください" class="form-input" />
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-bold text-slate-700">同行者 2</label>
+                <input type="text" name="companion2" placeholder="お名前をご記入ください" class="form-input" />
+              </div>
+            </div>
+
+            <div class="flex justify-between pt-8">
+              <button type="button" class="btn bg-slate-100 text-slate-600 hover:bg-slate-200 prev-btn px-8" data-prev="1">戻る</button>
+              <button type="button" class="btn btn-primary next-btn px-12" data-next="3">次へ進む &rarr;</button>
+            </div>
+          </div>
+
+          <!-- STEP 3: その他ご要望 -->
+          <div class="form-step hidden space-y-8" id="step-3">
+            <div class="relative">
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">その他ご要望</h3>
+              <p class="text-slate-400 text-sm">アレルギーや持病、配慮が必要な事項などございましたらご記入ください</p>
+              <div class="absolute -left-12 top-2 h-8 w-1 bg-ocean-500 rounded-full hidden md:block"></div>
+            </div>
+
+            <div class="space-y-2">
+              <textarea name="requests" rows="6" placeholder="何かございましたらお気軽にご記入ください。" class="form-input resize-none p-5"></textarea>
+            </div>
+
+            <div class="flex justify-between pt-8">
+              <button type="button" class="btn bg-slate-100 text-slate-600 hover:bg-slate-200 prev-btn px-8" data-prev="2">戻る</button>
+              <button type="button" class="btn btn-primary next-btn px-12" data-next="4">入力内容を確認する &rarr;</button>
+            </div>
+          </div>
+
+          <!-- STEP 4: 確認画面 -->
+          <div class="form-step hidden space-y-8" id="step-4">
+            <div class="relative">
+              <h3 class="text-2xl font-bold text-slate-800 mb-2">最終確認</h3>
+              <p class="text-slate-400 text-sm">入力内容に間違いがないかご確認ください</p>
+              <div class="absolute -left-12 top-2 h-8 w-1 bg-ocean-500 rounded-full hidden md:block"></div>
+            </div>
+
+            <div class="bg-ocean-50 rounded-2xl p-8 border border-ocean-100 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-12">
+                 <div class="pb-4 border-b border-ocean-100">
+                    <span class="text-xs font-bold text-ocean-400 uppercase tracking-widest block mb-1">お名前</span>
+                    <p class="font-bold text-slate-800 text-lg" id="confirm-name">--</p>
+                 </div>
+                 <div class="pb-4 border-b border-ocean-100">
+                    <span class="text-xs font-bold text-ocean-400 uppercase tracking-widest block mb-1">連絡先電話番号</span>
+                    <p class="font-bold text-slate-800 text-lg" id="confirm-phone">--</p>
+                 </div>
+                 <div class="pb-4 border-b border-ocean-100 lg:col-span-2">
+                    <span class="text-xs font-bold text-ocean-400 uppercase tracking-widest block mb-1">メールアドレス</span>
+                    <p class="font-bold text-slate-800" id="confirm-email">--</p>
+                 </div>
+              </div>
+              
+              <div class="pt-2 text-sm text-slate-500 italic">
+                 ※このボタンを押すと、予約申し込みが送信されます。担当者からの連絡をもって予約成立となります。
+              </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-8">
+              <button type="button" class="btn bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 prev-btn px-8 w-full md:w-auto" data-prev="3">内容を修正する</button>
+              <button type="submit" class="btn btn-primary w-full md:min-w-[300px] text-lg py-4 shadow-xl shadow-ocean-200" id="submit-btn">予約を確定する</button>
+            </div>
+          </div>
+          
+          <!-- Hidden context data from URL -->
+          <input type="hidden" name="planId" id="hidden-plan-id" />
+          <input type="hidden" name="planTitle" id="hidden-plan-title" />
+          <input type="hidden" name="adultCount" id="hidden-adult-count" />
+          <input type="hidden" name="childCount" id="hidden-child-count" />
+          <input type="hidden" name="departureDate" id="hidden-departure-date" />
+          <input type="hidden" name="totalAmount" id="hidden-total-amount" />
+        </form>
+        
+        <div class="p-8 text-center bg-slate-50 border-t border-slate-100">
+           <p class="text-[10px] text-slate-400">
+              This site is protected by reCAPTCHA and the Google <a href="#" class="underline">Privacy Policy</a> and <a href="#" class="underline">Terms of Service</a> apply.
+           </p>
         </div>
-      )}
+      </div>
     </div>
   </div>
+</BaseLayout>
 
-  <script src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}></script>
-  <script define:vars={{ RECAPTCHA_SITE_KEY, GAS_URL }}>
+<script src={`https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`}></script>
+<script define:vars={{ RECAPTCHA_SITE_KEY }}>
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const planId = params.get('id');
+    const planTitle = params.get('title');
+    const adult = params.get('adult');
+    const child = params.get('child');
+    const departure = params.get('departure');
+    const total = params.get('total');
+
+    if (!planId) {
+      document.getElementById('no-plan-error').classList.remove('hidden');
+      return;
+    }
+
+    // Populate UI
+    document.getElementById('plan-title-display').textContent = planTitle || '旅行プラン';
+    document.getElementById('departure-display').textContent = departure || '--';
+    document.getElementById('participants-display').textContent = `大人 ${adult || 1}名 / 小人 ${child || 0}名`;
+    document.getElementById('total-display').textContent = Number(total || 0).toLocaleString();
+
+    // Populate hidden inputs
+    document.getElementById('hidden-plan-id').value = planId;
+    document.getElementById('hidden-plan-title').value = planTitle;
+    document.getElementById('hidden-adult-count').value = adult;
+    document.getElementById('hidden-child-count').value = child;
+    document.getElementById('hidden-departure-date').value = departure;
+    document.getElementById('hidden-total-amount').value = total;
+
+    document.getElementById('reservation-container').classList.remove('opacity-0');
+
+    // Multi-step logic
     const steps = document.querySelectorAll('.form-step');
-    const dots = document.querySelectorAll('.step');
     const form = document.getElementById('reservation-form');
-    const summaryDisplay = document.getElementById('summary-data');
+    const confirmName = document.getElementById('confirm-name');
+    const confirmEmail = document.getElementById('confirm-email');
+    const confirmPhone = document.getElementById('confirm-phone');
 
-    // Navigation Logic
     document.querySelectorAll('.next-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const nextStepId = btn.getAttribute('data-next');
-        showStep(nextStepId);
-        if(nextStepId === '4') updateSummary();
+        const id = btn.getAttribute('data-next');
+        const currentStep = btn.closest('.form-step');
+        
+        if (id === '2') {
+           const requireds = currentStep.querySelectorAll('input[required]');
+           let isValid = true;
+           requireds.forEach(i => {
+             if(!i.value) { i.classList.add('border-red-400'); isValid = false; }
+             else { i.classList.remove('border-red-400'); }
+           });
+           if (!isValid) return;
+        }
+
+        showStep(id);
+        if (id === '4') {
+          const fd = new FormData(form);
+          confirmName.textContent = fd.get('representativeName');
+          confirmEmail.textContent = fd.get('email');
+          confirmPhone.textContent = fd.get('phone');
+        }
       });
     });
 
@@ -158,82 +266,36 @@ const normalizedBase = base.endsWith('/') ? base : base + '/';
       steps.forEach(s => s.classList.add('hidden'));
       document.getElementById(`step-${id}`).classList.remove('hidden');
       
-      dots.forEach((d, idx) => {
-        if(idx + 1 <= id) d.classList.add('active');
-        else d.classList.remove('active');
-      });
-      window.scrollTo(0, 0);
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.getElementById(`step-dot-${i}`);
+        const div = document.getElementById(`divider-${i}`);
+        if(i == id) {
+          dot.className = 'step-dot w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-ocean-600 text-white shadow-lg shadow-ocean-200';
+        } else if (i < id) {
+          dot.className = 'step-dot w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-ocean-100 text-ocean-700 border-ocean-300';
+          if(div) div.classList.add('bg-ocean-400');
+        } else {
+          dot.className = 'step-dot w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm bg-white border-2 border-slate-200 text-slate-300';
+          if(div) div.classList.remove('bg-ocean-400');
+        }
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function updateSummary() {
-      const fd = new FormData(form);
-      summaryDisplay.innerHTML = `
-        <p><strong>お名前:</strong> ${fd.get('representativeName')}</p>
-        <p><strong>メール:</strong> ${fd.get('email')}</p>
-        <p><strong>電話:</strong> ${fd.get('phone')}</p>
-      `;
-    }
-
-    // Submission Logic
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const submitBtn = document.getElementById('submit-btn');
-      submitBtn.disabled = true;
-      submitBtn.textContent = '送信中...';
-
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = '送信中...';
       try {
-        const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'reserve' });
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        data['g-recaptcha-response'] = token;
-
-        const response = await fetch(GAS_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          body: new URLSearchParams(data)
-        });
-
-        alert('予約の送信が完了しました。確認メールが届くのを待ちください。');
+        await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'reserve' });
+        alert('予約申し込みを送信しました。担当者より折り返しご連絡いたします。');
         window.location.href = normalizedBase;
       } catch (err) {
-        alert('エラーが発生しました。時間を置いて再度お試しください。');
-        submitBtn.disabled = false;
-        submitBtn.textContent = '予約を確定する';
+        alert('エラーが発生しました。お手数ですがお電話にてお問い合わせください。');
+        btn.disabled = false;
+        btn.textContent = '予約を確定する';
       }
     });
-  </script>
-
-  <style>
-    .page-content { padding: 4rem 1.5rem; }
-    .reservation-container { max-width: 800px; margin: 0 auto; }
-    .page-title { text-align: center; margin-bottom: 3rem; font-size: 2rem; }
-
-    .plan-summary-bar { background: var(--dark); color: #fff; padding: 1.5rem 2rem; border-radius: 8px; margin-bottom: 2rem; }
-    .plan-summary-bar h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
-    .summary-details { display: flex; gap: 1.5rem; font-size: 0.9rem; color: #ccc; }
-    .total-price { color: #fff; font-weight: bold; }
-
-    /* Stepper */
-    .form-stepper { display: flex; align-items: center; justify-content: center; margin-bottom: 3rem; }
-    .step { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--border); background: #fff; }
-    .step.active { border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1); }
-    .step-divider { width: 50px; height: 2px; background: var(--border); margin: 0 10px; }
-
-    /* Form Styles */
-    .reservation-wrapper { background: #fff; border: 1px solid var(--border); padding: 3rem; border-radius: 12px; }
-    .form-step h3 { margin-top: 0; margin-bottom: 2rem; font-size: 1.3rem; color: var(--primary); }
-    .hidden { display: none; }
-
-    .form-group { margin-bottom: 1.5rem; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 0.5rem; color: #444; }
-    .form-group input, .form-group textarea { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 6px; font-size: 1rem; }
-    
-    .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
-    .btn { padding: 0.8rem 2rem; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; font-size: 1rem; }
-    .btn-light { background: var(--light); color: var(--dark); border: 1px solid var(--border); }
-    .btn-success { background: var(--secondary); color: #fff; }
-    .confirmation-box { background: var(--light); padding: 2rem; border-radius: 8px; margin-bottom: 2rem; }
-
-    .recaptcha-notice { font-size: 0.7rem; color: #999; margin-top: 2rem; text-align: center; }
-  </style>
-</BaseLayout>
+  });
+</script>
