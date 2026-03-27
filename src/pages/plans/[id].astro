@@ -22,7 +22,7 @@ if (!plan) {
 <BaseLayout title={plan.title}>
   <div class="container page-content">
     <div class="detail-header">
-      <a href="/travel-agency-astro/plans" class="back-link">&larr; 一覧に戻る</a>
+      <a href={`${import.meta.env.BASE_URL}plans`} class="back-link">&larr; 一覧に戻る</a>
       <h1 class="plan-title">{plan.title}</h1>
       <p class="plan-price-info">基本料金: <span class="price-val">{plan.price.toLocaleString()}円</span>名様）</p>
     </div>

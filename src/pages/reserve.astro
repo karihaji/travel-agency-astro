@@ -22,7 +22,7 @@ const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
       {!plan ? (
         <div class="error-msg">
           <p>プラン情報が見つかりません。一覧から再度プランを選択してください。</p>
-          <a href="/travel-agency-astro/plans" class="btn btn-outline">一覧に戻る</a>
+          <a href={`${import.meta.env.BASE_URL}plans`} class="btn btn-outline">一覧に戻る</a>
         </div>
       ) : (
         <div class="reservation-wrapper">
@@ -192,7 +192,7 @@ const GAS_URL = import.meta.env.PUBLIC_GAS_URL;
         });
 
         alert('予約の送信が完了しました。確認メールが届くのを待ちください。');
-        window.location.href = '/travel-agency-astro/';
+        window.location.href = import.meta.env.BASE_URL;
       } catch (err) {
         alert('エラーが発生しました。時間を置いて再度お試しください。');
         submitBtn.disabled = false;
